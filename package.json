@@ -1,0 +1,21 @@
+{
+  "name": "shop",
+  "version": "1.0.0",
+  "description": "ecomoerce site",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev" : "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
+    "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server"
+  },
+  "author": "Marco De Carlo",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
