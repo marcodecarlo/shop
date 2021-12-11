@@ -12,6 +12,7 @@ const reducer = combineReducers({
     product: productReducer,
     productReviews: productReviewsReducer,
     auth: authReducer,
+    user : userReducer
 })
 
 

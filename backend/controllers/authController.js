@@ -93,6 +93,25 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
   //update avatar
 
+  if( req.body.avatar !== '' ){
+    const user = await User.findById(req.user.id);
+
+    const image_id = user.avatar.public_id;
+
+    const res = await cloudinary.v2.uploader.destroy(image_id);
+
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: 'avatars',
+      width: 150,
+      crop: "scale"
+    });
+
+    newUserData.avatar = {
+      public_id: result.publict_id,
+      url: result.secure_url
+    }
+  }
+
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
     runValidators: true,
@@ -194,9 +213,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   //Create reset password url
-  const resetUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/password/reset/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nif you have not requested this email, then ignore it.`;
 
