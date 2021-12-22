@@ -17,6 +17,9 @@ import NewPassword from "./components/route/NewPassword";
 
 import { loadUser } from "./actions/userActions";
 import store from "./store";
+import ConfirmOrder from "./components/cart/ConfirmOrder";
+import Shipping from "./components/cart/Shipping";
+import Cart from "./components/cart/Cart";
 
 function App() {
   
@@ -32,6 +35,10 @@ function App() {
           <Route path="/" component={Home} exact />
           <Route path="/search/:keyword" component={Home} />
           <Route path="/product/:id" component={ProductDetails} exact />
+
+          <Route path="/cart" component={Cart} exact />
+          <ProtectedRoute path="/shipping" component={Shipping} exact />
+          <ProtectedRoute path="/order/confirm" component={ConfirmOrder} exact />
 
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
