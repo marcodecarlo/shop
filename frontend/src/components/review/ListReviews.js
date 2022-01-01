@@ -1,23 +1,31 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { Route, Redirect } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-const ListReviews = ({ reviews }) => {
+const ProtectedRoute = ({ isAdmin, component: Component, ...rest }) => {
+
+    const { isAuthenticated, loading, user } = useSelector(state => state.auth)
+
     return (
-        <div class="reviews w-75">
-            <h3>Other's Reviews:</h3>
-            <hr />
-            {reviews && reviews.map(review => (
-                <div key={review._id} class="review-card my-3">
-                    <div class="rating-outer">
-                        <div class="rating-inner" style={{ width: `${(review.rating / 5) * 100}%` }}></div>
-                    </div>
-                    <p class="review_user">by {review.name}</p>
-                    <p class="review_comment">{review.comment}</p>
+        <Fragment>
+            {loading === false && (
+                <Route
+                    {...rest}
+                    render={props => {
+                        if (isAuthenticated === false) {
+                            return <Redirect to='/login' />
+                        }
 
-                    <hr />
-                </div>
-            ))}
-        </div>
+                        if (isAdmin === true && user.role !== 'admin') {
+                            return <Redirect to="/" />
+                        }
+
+                        return <Component {...props} />
+                    }}
+                />
+            )}
+        </Fragment>
     )
 }
 
-export default ListReviews
+export default ProtectedRoute
